@@ -21,7 +21,7 @@ Write a `Dockerfile` that meets the following criteria:
 
 4. **Expose Port**:
    - Expose the default port that this app uses.
-   - **HINT**: You'll need to identify how this app executes and listens. Note that app execution will begin at `start.sh`
+   - **hint**: You'll need to identify how this app executes and listens. Note that app execution will begin at `start.sh` and you'll have to dig. We're only concerned with how the server is running, not workers if we can help it.
 
 5. **Create User and Group**:
    - Add a Linux user `spacex`.
@@ -33,12 +33,14 @@ Write a `Dockerfile` that meets the following criteria:
 
 7. **Run Commands as `spacex` User**:
    - Use a Dockerfile keyword to execute all subsequent commands as `spacex`.
+   - **hint**: Remember that by default you run all commands as root but if you switch to `spacex` user in the Dockerfile then you might see permission denys on some commands. Be mindful of ***when you should switch*** to the spacex user.
 
 8. **Working Directory**:
    - Set the working directory to `/app`.
 
 9. **Entry Point**:
    - Set the entry point to `/app/start.sh`.
+   - **hint**: hmm...do you have the `start.sh` file?
 
 10. **Copy Dependencies**:
     - Add the following line:
@@ -107,6 +109,13 @@ Students must provide the following to demonstrate successful completion of the 
 
 5. **Verification**:
    - Provide evidence (e.g., a screenshot of `curl` or browser) that the `app` service is accessible on the specified port.
+   - **Hint**: Notice that nodejs handles routing via the `const router = new Router()` syntax. The syntax of the endpoint does work like:
+      ```
+      localhost:<PORT>/v4/<endpoint>
+      localhost:<PORT>/latest/<endpoint>
+      ```
+      Where endpoint is the thing you're trying to interrogate.  
+      Additionally, you may have noticed that all the admin endpoints expect an API key right? Well...**hint**: How does it actually know that your API key is correct or not? Who/what decides it's correct?
 
 6. **BONUS (10pts)**:
     - Attempt to find a way to get admin access to the app. Beware of dinosaurs.
