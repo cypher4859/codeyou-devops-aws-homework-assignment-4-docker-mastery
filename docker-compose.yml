@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 6673:6673
+    volumes:
+      - spacex:/app/node_modules
+    environment:
+      - DB_USERNAME=root
+      - DB_PASSWORD=toor
+      - DB_NAME=spacex
+      - DB_HOST=mongo
+      - AUTH_DATABASE=auth
+    depends_on:
+      - mongo
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:6673/v4/admin/health"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+
+  mongo:
+    image: mongo:6.0
+    container_name: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+    environment:
+      - MONGO_INITDB_DATABASE=spacex
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=toor
+      - ADMIN_USER=spacex-admin
+      - ADMIN_API_KEY=my-super-secure-key
+      - MONGO_AUTH_DATABASE=auth
+
+volumes:
+  spacex:
+    driver: local

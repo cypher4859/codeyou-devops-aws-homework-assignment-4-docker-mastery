@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
 
-const db = mongoose.connection.useDb('auth', { useCache: true });
+// This assumes that there is a database in our Mongo instance
+// called `auth`
+const authDatabase = process.env.AUTH_DATABASE;
+const db = mongoose.connection.useDb(authDatabase, { useCache: false });
 
 /**
  * Authentication middleware

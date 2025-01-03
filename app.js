@@ -17,7 +17,8 @@ const username = process.env.DB_USERNAME;
 const password = process.env.DB_PASSWORD;
 const database = process.env.DB_NAME;
 const host = process.env.DB_HOST;
-mongoose.connect(`mongodb://${username}:${password}@${host}:27017/${database}`, {
+const authDatabase = process.env.AUTH_DATABASE
+mongoose.connect(`mongodb://${username}:${password}@${host}:27017/${database}?authSource=${authDatabase}`, {
   bufferCommands: false,
   family: 4,
 });

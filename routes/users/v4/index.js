@@ -3,7 +3,7 @@ import { User } from '../../../models/index.js';
 import { auth, authz } from '../../../middleware/index.js';
 
 const router = new Router({
-  prefix: '/(v4|latest)/users',
+  prefix: '/(v4|latest)/users', // http://<any host>/v4/users
 });
 
 // Get all users
