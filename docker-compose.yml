@@ -12,6 +12,7 @@ services:
       - DB_PASSWORD=toor
       - DB_NAME=spacex
       - DB_HOST=mongo
+      - AUTH_DATABASE=auth
     depends_on:
       - mongo
 
@@ -25,6 +26,7 @@ services:
       - ADMIN_USER=spacex_admin
       - ADMIN_API_KEY=my-secure-api-key
       - MONGO_INITDB_DATABASE=spacex
+      - MONGO_AUTH_DATABASE=auth
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=toor
 

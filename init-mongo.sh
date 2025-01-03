@@ -9,7 +9,7 @@ fi
 
 # ADMIN_USER="spacex_admin"
 # ADMIN_API_KEY="your-secure-api-key"
-SEED_ROLES="[\"superuser\"]"
+SEED_ROLES="['user:list', 'user:create', 'user:delete']"
 
 # Wait for MongoDB to start
 until mongosh --eval "print(\"waited for connection\")"; do
@@ -19,19 +19,36 @@ done
 
 # Create a new user
 mongosh <<EOF
-use $MONGO_INITDB_DATABASE;
+use $MONGO_AUTH_DATABASE;
 db.createUser({
   user: "$MONGO_INITDB_ROOT_USERNAME",
   pwd: "$MONGO_INITDB_ROOT_PASSWORD",
   roles: [
-    { role: "readWrite", db: "$MONGO_INITDB_DATABASE" }
+    { role: "readWrite", db: "$MONGO_INITDB_DATABASE" },
+    { role: "readWrite", db: "$MONGO_AUTH_DATABASE" }
   ]
 });
-print("Application user created successfully");
 db.users.insertOne({
   name: "$ADMIN_USER",
   key: "$ADMIN_API_KEY",
-  role: $SEED_ROLES
+  roles: [
+    "user:list",
+    "user:create",
+    "user:delete"
+  ]
 });
-print("Seed user added to 'users' collection");
+print("Seed user added to Admin 'users' collection");
+print("Application user created successfully");
+
+use $MONGO_INITDB_DATABASE;
+db.users.insertOne({
+  name: "$ADMIN_USER",
+  key: "$ADMIN_API_KEY",
+  roles: [
+    "user:list",
+    "user:create",
+    "user:delete"
+  ]
+});
+print("Seed user added to App Data 'users' collection");
 EOF
